@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ec">
+  <meta name="description" content="春日部邮局，把技术、生活与沿途的风景装进信封。">
+  <title>春日部邮局</title>
+  <link rel="icon" href="/assets/mailbox.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/catalog.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <header class="site-header">
+    <div class="wrap topbar">
+      <a class="brand" href="/" aria-label="春日部邮局首页">
+        <img src="/assets/mailbox.svg" width="41" height="48" alt="">
+        <span><strong>春日部邮局</strong><small>KASUKABE POST</small></span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="/"><svg class="icon"><use href="/icons.svg#home"/></svg>首页</a>
+        <a href="/articles"><svg class="icon"><use href="/icons.svg#book"/></svg>文章</a>
+        <a href="/projects"><svg class="icon"><use href="/icons.svg#case"/></svg>作品</a>
+        <a href="/tools"><svg class="icon"><use href="/icons.svg#grid"/></svg>工具</a>
+        <a href="/about"><svg class="icon"><use href="/icons.svg#user"/></svg>关于</a>
+      </nav>
+      <button class="search-trigger" type="button" aria-haspopup="dialog" aria-label="搜索文章">
+        <svg class="icon"><use href="/icons.svg#search"/></svg><span>搜索文章</span><kbd>/</kbd>
+      </button>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <footer class="site-footer"><div class="wrap footer-inner">
+    <span><img src="/assets/mailbox.svg" alt="" width="21" height="26">春日部邮局<span class="footer-site"></span></span>
+    <a href="/admin/"><svg class="icon"><use href="/icons.svg#pen"/></svg>站主写作台</a>
+  </div></footer>
+  <dialog id="search-dialog" aria-labelledby="search-heading">
+    <div class="dialog-head"><h2 id="search-heading">搜索文章</h2><button type="button" class="dialog-close" aria-label="关闭搜索"><svg class="icon"><use href="/icons.svg#close"/></svg></button></div>
+    <form action="/articles" method="get" id="site-search">
+      <label for="search-keyword">在标题、摘要或正文中查找</label>
+      <div class="dialog-form"><input type="search" name="keyword" id="search-keyword" maxlength="200" placeholder="想找哪一封信？" autofocus><button class="primary" type="submit">查找<svg class="icon"><use href="/icons.svg#arrow"/></svg></button></div>
+    </form>
+  </dialog>
+  <template id="home-template">
+    <div class="wrap home">
+      <section class="hero-frame" aria-labelledby="hero-heading">
+        <div class="hero-picture">
+          <img class="hero-art" src="/assets/kasukabe.webp" alt="小新举着一封信，和小白一起跑向春日部的红邮筒" width="2172" height="724" fetchpriority="high">
+          <div class="hero-copy">
+            <div class="hero-label"><svg class="icon"><use href="/icons.svg#plane"/></svg>春日部通信<span>／</span><span lang="en">AIR MAIL</span></div>
+            <h1 id="hero-heading">下一站，<br><em>春日部</em>邮局<span class="hero-stop">。</span></h1>
+            <p>把日常装进信封，和小新一起寄给远方。</p>
+            <a class="primary" href="/articles"><svg class="icon"><use href="/icons.svg#book"/></svg>翻开文章手记<svg class="icon arrow"><use href="/icons.svg#arrow"/></svg></a>
+          </div>
+        </div>
+        <div class="hero-caption">
+          <span><svg class="icon"><use href="/icons.svg#train"/></svg>春日部站<i class="track"></i><svg class="icon"><use href="/icons.svg#mail"/></svg>你的信箱</span>
+          <span class="airmark" lang="en">KASUKABE <i></i> AIR POST</span>
+        </div>
+      </section>
+      <nav class="destinations" aria-label="选择要逛的栏目">
+        <a href="/articles" class="ticket ticket-letter">
+          <span class="stamp-art"><i></i></span>
+          <span class="ticket-text"><small lang="en">LETTERS</small><strong>文章手记</strong><span>技术、生活与小日记</span></span>
+          <span class="ticket-end"><svg class="icon"><use href="/icons.svg#arrow"/></svg></span>
+        </a>
+        <a href="/projects" class="ticket ticket-project">
+          <span class="stamp-art"><i></i></span>
+          <span class="ticket-text"><small lang="en">PROJECTS</small><strong>作品展柜</strong><span>看看沿途做的小作品</span></span>
+          <span class="ticket-end"><svg class="icon"><use href="/icons.svg#arrow"/></svg></span>
+        </a>
+        <a href="/tools" class="ticket ticket-tool">
+          <span class="stamp-art"><i></i></span>
+          <span class="ticket-text"><small lang="en">TOOLBOX</small><strong>工具口袋</strong><span>装些顺手的小工具</span></span>
+          <span class="ticket-end"><svg class="icon"><use href="/icons.svg#arrow"/></svg></span>
+        </a>
+      </nav>
+      <div class="home-columns">
+        <section class="inbox paper-panel" aria-labelledby="inbox-heading">
+          <header class="panel-head">
+            <div class="panel-title"><span class="section-icon"><svg class="icon"><use href="/icons.svg#mail"/></svg></span><h2 id="inbox-heading">最新来信</h2></div>
+            <a href="/articles" class="text-link">全部文章<svg class="icon"><use href="/icons.svg#arrow"/></svg></a>
+          </header>
+          <div class="mail-tabs" role="group" aria-label="按文章类型查看最新来信">
+            <button type="button" data-type="" aria-pressed="true">全部</button>
+            <button type="button" data-type="TECH" aria-pressed="false">技术</button>
+            <button type="button" data-type="LIFE" aria-pressed="false">生活</button>
+            <button type="button" data-type="DIARY" aria-pressed="false">日记</button>
+          </div>
+          <div class="letter-list" aria-live="polite" aria-busy="true">正在收取来信…</div>
+        </section>
+        <aside class="daily paper-panel">
+          <header class="panel-head"><div class="panel-title"><span class="section-icon"><svg class="icon"><use href="/icons.svg#stamp"/></svg></span><h2>今日邮戳</h2></div></header>
+          <div class="daily-body">
+            <div><small class="date-label" lang="en">DATE OF ISSUE</small><time class="daily-date"></time><span class="daily-week"></span></div>
+            <div class="seal" aria-hidden="true"><small>KASUKABE</small><b>〒</b><span>春日部</span></div>
+          </div>
+          <button type="button" class="stamp-button"><svg class="icon"><use href="/icons.svg#stamp"/></svg><span>盖个到访戳</span></button>
+          <span class="stamp-feedback" role="status"></span>
+        </aside>
+      </div>
+    </div>
+  </template>
+  <noscript><p>请开启 JavaScript，以查看文章、作品和工具。</p></noscript>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f5ec">
+  <meta name="robots" content="noindex">
+  <title>站主写作台 · 春日部邮局</title>
+  <link rel="icon" href="/assets/mailbox.svg" type="image/svg+xml">
+  <script src="/season.js"></script>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/studio.css">
+  <link rel="stylesheet" href="/studio-content.css">
+  <link rel="stylesheet" href="/studio-management.css">
+  <link rel="stylesheet" href="/season.css">
+  <script type="module" src="/studio.js"></script>
+</head>
+<body class="studio">
+  <a class="skip" href="#studio-main">跳到工作区</a>
+  <header class="site-header">
+    <div class="wrap topbar st-topbar">
+      <a class="brand" href="/"><img src="/assets/mailbox.svg" width="41" height="48" alt=""><span><strong>春日部邮局</strong><small>KASUKABE POST</small></span></a>
+      <season-switch></season-switch>
+      <div class="st-top-actions"><a href="/" class="st-front-link"><svg class="icon" aria-hidden="true"><use href="/icons.svg#home"/></svg>回到博客</a><span id="identity" hidden></span><button id="signout" class="st-btn" hidden>退出登录</button></div>
+    </div>
+  </header>
+  <div id="session-check" class="wrap st-check" role="status">正在检查登录状态…</div>
+  <main id="studio-main" tabindex="-1">
+    <section id="signin" hidden class="st-login" aria-labelledby="signin-title">
+      <div class="st-login-art" role="img" aria-label="小新和小白正在给春日部邮局送信"></div>
+      <div class="st-login-paper">
+        <div class="st-login-heading"><svg class="icon" aria-hidden="true"><use href="/icons.svg#pen"/></svg><h1 id="signin-title">站主写作台</h1></div>
+        <p class="st-intro">登录春日部邮局，继续写你的下一封信。</p>
+        <form id="sign-in-form">
+          <label class="st-field">站主账号<input name="username" autocomplete="username" maxlength="50" required></label>
+          <label class="st-field">密码<input type="password" name="password" autocomplete="current-password" required></label>
+          <p id="auth-feedback" role="status" class="st-error"></p>
+          <button type="submit" class="st-btn st-primary">登录写作台</button>
+        </form>
+      </div>
+    </section>
+    <div class="wrap st-layout" id="workspace" hidden>
+      <aside class="st-sidebar"><nav id="studio-nav" aria-label="写作台导航"></nav></aside>
+      <section id="studio-screen" tabindex="-1" aria-label="管理工作区"></section>
+    </div>
+  </main>
+  <div class="st-global-notice" role="status" id="studio-notice"></div>
+  <noscript><p>请开启 JavaScript 以登录和编辑内容。</p></noscript>
+</body>
+</html>

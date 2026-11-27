@@ -1,0 +1,100 @@
+:root { --season-scene: url('/assets/kasukabe.webp'); }
+:root[data-season="snow"] { --season-scene: url('/assets/kasukabe-snow.webp'); }
+
+season-switch {
+  display: inline-flex;
+  flex: none;
+  vertical-align: middle;
+  font: 700 13px/1.2 "Nunito", "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+.season-options {
+  display: flex;
+  align-items: stretch;
+  gap: 3px;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid #c7cbb8;
+  border-radius: 8px;
+  background: #edeedf;
+}
+.season-choice {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 4px 9px;
+  border-radius: 4px;
+  color: #526153;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.season-choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.season-choice::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 3px;
+  background: var(--stamp-face);
+  opacity: 0;
+  mask: linear-gradient(#000 0 0) center / calc(100% - 4px) calc(100% - 4px) no-repeat,
+    radial-gradient(circle, #000 66%, transparent 73%) 0 0 / 5px 5px;
+}
+.season-choice:has(input:checked)::before { opacity: 1; }
+.season-choice:has(input[value="sun"]:checked) { --stamp-face: #fff4cf; color: #76420d; }
+.season-choice:has(input[value="snow"]:checked) { --stamp-face: #effaff; color: #25516b; }
+.season-choice:has(input:focus-visible) { outline: 2px solid currentColor; outline-offset: 2px; }
+.season-choice:hover { color: #233d38; }
+.season-symbol {
+  width: 19px;
+  height: 19px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.season-choice:has(input[value="sun"]:checked) .season-symbol { color: #98601a; fill: #f1be55; }
+[data-season="snow"] .season-options { border-color: #b2c6d0; background: #d6e4ed; }
+[data-season="snow"] .season-choice:not(:has(input:checked)) { color: #4c6573; }
+@media (prefers-reduced-motion: no-preference) {
+  .season-choice::before { transition: opacity .17s; }
+  .season-choice:has(input:checked) .season-symbol { animation: season-stamp .28s ease-out; }
+  @keyframes season-stamp { from { transform: rotate(-14deg) scale(.82); } to { transform: none; } }
+}
+@media (forced-colors: active) {
+  .season-choice:has(input:checked) { outline: 2px solid SelectedItem; }
+  .season-choice:has(input:focus-visible) { outline: 3px dashed Highlight; }
+}
+
+.visitor-actions { display: flex; align-items: center; gap: 10px; }
+@media (min-width: 701px) and (max-width: 1040px) {
+  .visitor-actions .search-trigger { width: 38px; height: 38px; padding: 0; }
+  .visitor-actions .search-trigger span, .visitor-actions .search-trigger kbd { display: none; }
+  .site-header:has(.visitor-actions) .topbar { gap: 8px; }
+}
+@media (max-width: 700px) {
+  .visitor-actions { grid-area: 1 / 2; gap: 6px; }
+  .visitor-actions .search-trigger { width: 36px; height: 36px; padding: 0; }
+  .visitor-actions .search-trigger span, .visitor-actions .search-trigger kbd { display: none; }
+  .season-choice { padding-inline: 6px; }
+}
+@media (max-width: 360px) {
+  .visitor-actions { gap: 4px; }
+  .season-options { gap: 1px; padding: 2px; }
+  .season-choice { gap: 3px; padding-inline: 4px; }
+  .season-symbol { width: 15px; height: 15px; }
+}

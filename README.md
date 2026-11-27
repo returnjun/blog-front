@@ -1,12 +1,12 @@
 # 春日部邮局
 
-小新主题的访客网站，使用原生 JavaScript 和 CSS。文章、分类、作品、工具和站点设置由配套的 Spring Boot 博客提供，写作台沿用后端现有页面。
+小新主题博客。访客页面和站主写作台都由本项目提供，使用原生 JavaScript 和 CSS。配套的 Java 项目负责数据、媒体文件和站主身份验证。
 
 ## 本地运行
 
-1. 在配套的 `blog` 项目中按其 README 启动 MySQL 和 Spring Boot，默认后端为 `http://127.0.0.1:8091`。
+1. 在配套的 `blog` 项目中按其 README 启动 MySQL 和 Spring Boot。已有站主的 Windows 开发环境可运行 `.\start-local.ps1`。默认可用 `http://127.0.0.1:8091/api/v1/settings` 检查接口。
 2. 在本目录使用 Node.js 18.11 或更高版本运行 `npm start`，也可以运行 `node server.mjs`。项目无需安装依赖。
-3. 打开[博客首页](http://127.0.0.1:5173/)或[站主写作台](http://127.0.0.1:5173/admin/)。
+3. 打开[博客首页](http://127.0.0.1:5173/)，从页脚「站主写作台」进入管理区，也可以直接打开[写作台](http://127.0.0.1:5173/admin/)。使用后端已有的站主账号登录。
 
 如需更换端口，在 PowerShell 设置当前终端的环境变量后启动。
 
@@ -18,9 +18,24 @@ npm start
 
 ## 路由与接口
 
-首页、文章列表与详情、作品列表与详情、工具目录、工具详情和关于页均可直接访问或刷新。访客资源位于 `public/`。本地服务默认只监听回环地址。它将 `/api/`、`/media/`、`/admin/` 和后端托管的独立工具入口转发给 Spring Boot，保留浏览器的 Host、Origin 和会话 Cookie。后端停用时，数据请求返回 HTTP 502。
+本地服务默认只监听回环地址。`server.mjs` 在前端提供访客页、写作台和静态文件。它只把 `/api/` 和 `/media/` 转发给 Java，并保留浏览器的 Host、Origin 和会话 Cookie。后端停用时，数据请求返回 HTTP 502。
 
-部署时将 `public/` 的内容放入静态资源目录，按 `server.mjs` 中的公开页面路由回退到 `index.html`，并将业务路径接入同一站点的后端。Markdown 渲染器及其许可随访客资源分发。
+首页「当地天气」由访客浏览器直接向 GeoJS 查询网络出口所在的城市，再以保留一位小数的经纬度向 Open-Meteo 获取当前天气。使用代理时可能显示出口城市。卡片展示摄氏气温、中文天况和数据对应的当地时间。天气结果在当前页面内存中复用 15 分钟，也可以手动刷新。博客数据库不保存访客 IP 或位置。[GeoJS 城市定位](https://www.geojs.io/docs/v1/endpoints/geo/) · [Open-Meteo 当前天气](https://open-meteo.com/en/docs)
+
+页首的「晴天 / 雪天」控制邮局插画和页面配色，首次访问默认为晴天。选择保存在当前浏览器，在访客页和写作台之间共享。雪天的飘雪仅出现在首页插画内，并遵循系统的「减少动态效果」设置。两种外观下，天气卡都按访客网络出口展示实际天气。[晴天预览](verification/season-sun.jpg) · [雪天预览](verification/season-snow.jpg) · [手机雪天预览](verification/season-snow-mobile.jpg)
+
+个人非商业博客可使用此免密钥的天气服务，数据以 CC BY 4.0 授权。卡片在读数旁标注来源，并将 WMO 天气代码转换为中文和图标。商业部署请按提供方条款配置适用的服务。[天气数据许可](https://open-meteo.com/en/licence) · [接口使用条款](https://open-meteo.com/en/terms)
+
+| 浏览器入口 | 作用 |
+| --- | --- |
+| `/`、`/articles`、`/projects`、`/tools`、`/about` | 访问博客与内容详情。文章和作品详情使用分类路径加 slug，工具详情为 `/catalog/tools/{slug}`。 |
+| `/admin/` | 登录后查看内容数量、最近编辑的文章，或撰写新稿。 |
+| `/admin/articles`、`/admin/projects`、`/admin/tools` | 内容列表与回收站。进入 `/new` 新建，进入 `/{id}` 编辑。文章初次保存后自动保存草稿，发布前会等待保存完成。 |
+| `/admin/categories`、`/admin/media`、`/admin/settings` | 分类增删改、媒体上传和可见性管理、站点设置。 |
+
+写作台通过 `/api/v1/admin/session` 使用服务端 HttpOnly 会话。管理写请求带 `X-Blog-Request: 1`。编辑器读取服务端版本号，遇到 409 可逐字段核对修改。发布后的文章由站主显式保存。
+
+部署时可直接使用本项目的 Node 服务。若使用其他静态服务器，请按 `server.mjs` 的匹配规则将访客页面指向 `public/index.html`，将写作台页面指向 `public/studio.html`，并把两个业务路径代理至 Java。工具的外部入口使用完整网址，独立的站内工具须由前端托管在对应路径。运行 `npm test` 可验证两个页面入口、深链接与旧资源的 404。
 
 ## 已执行的联调
 
@@ -36,3 +51,18 @@ npm start
 | 时间设置 | 实际后台分别保存 Asia/Shanghai 和 UTC+08:00，首页与带发布时间的正文均正常加载。 |
 
 [桌面首页](verification/home-desktop.jpg) · [手机首页](verification/home-mobile.jpg) · [带真实上传封面的文章详情](verification/article-detail.jpg)
+
+### 独立写作台验收
+
+使用移除网页资源后重新打包的 Java 服务、独立 MySQL 和 Edge 浏览器联调。测试仅写入临时库。实测 Java 的 `/`、`/index.html`、`/admin/`、`/admin/index.html` 均返回 404，前端的访客入口与写作台深链接返回各自的本地 HTML。
+
+本机 MySQL 8.0.13 在从空库执行项目建表脚本、追加管理员头像外键时返回 1067。验收库改在建表时声明相同的循环外键，随后通过 `information_schema.referential_constraints` 核对其指向 `media_asset`。此次前端迁移未改动业务库及其建表脚本。
+
+| 流程 | 浏览器、接口与数据库结果 |
+| --- | --- |
+| 写作与发布 | 在写作台新建文章，首存后自动保存到版本 1，点击发布后匿名访客可读取正文和标签；下线后公开详情返回 404。重新发布后 MySQL 行为 `id=2, slug=post-office-regression, status=PUBLISHED, visibility=PUBLIC, version=5`，标题与公开详情一致。 |
+| 并发与身份 | 两个编辑页面实际触发 409，合并后服务端同时保留了另一页的标题和本页正文。会话过期后，原页面重新登录保留了未提交的标题；保存后在访客页可见。主动退出后身份接口返回 401。 |
+| 管理 | 作品和工具走通创建、发布、下线、回收、恢复。重复分类标识返回 409，非法时区返回 400，表单保留输入。公开 WebP 下载的 87,792 字节与上传一致，改回私密后匿名请求返回 404。媒体库选择、Markdown 插入与封面引用均成功。 |
+| 布局 | 检查了桌面登录页、工作台与编辑器，以及 360 和 390 像素宽度下的管理界面。 |
+
+[站主登录](verification/studio-login.jpg) · [工作台](verification/studio-desk.jpg) · [文章编辑](verification/studio-editor.jpg) · [手机编辑](verification/studio-mobile.jpg)

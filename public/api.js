@@ -1,7 +1,11 @@
-/** Read one of the site's same-origin JSON endpoints. */
-export async function api(path, { signal } = {}) {
+export async function api(path, { method = 'GET', body, signal } = {}) {
+  const headers = { Accept: 'application/json' };
+  const multipart = body instanceof FormData;
+  if (method !== 'GET' && method !== 'HEAD' && path.startsWith('/admin/')) headers['X-Blog-Request'] = '1';
+  if (body !== undefined && !multipart) headers['Content-Type'] = 'application/json';
   const response = await fetch('/api/v1' + path, {
-    headers: { Accept: 'application/json' },
+    method, headers,
+    body: body === undefined || multipart ? body : JSON.stringify(body),
     credentials: 'same-origin',
     cache: 'no-store',
     signal

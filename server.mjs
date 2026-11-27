@@ -21,7 +21,8 @@ const types = {
   '.avif': 'image/avif', '.woff2': 'font/woff2', '.woff': 'font/woff'
 };
 const publicPage = /^\/(?:articles(?:\/[^/]+)?|projects(?:\/[^/]+)?|tools|catalog\/tools\/[^/]+|about)?\/?$/;
-const backendPrefix = /^\/(?:api|media|admin)(?:\/|$)/;
+const studioPage = /^\/admin(?:\/(?:index\.html|(?:articles|projects|tools)(?:\/(?:new|[1-9]\d*))?|categories|media|settings))?\/?$/;
+const backendPrefix = /^\/(?:api|media)(?:\/|$)/;
 
 function fail(res, status, detail) {
   if (res.destroyed) return;
@@ -69,24 +70,21 @@ async function serve(req, res) {
     return fail(res, 400, '请求路径无效');
   }
   if (backendPrefix.test(pathname)) return proxy(req, res);
-  const page = publicPage.test(pathname);
   if (!['GET', 'HEAD'].includes(req.method)) {
-    if (!page) return proxy(req, res);
     res.setHeader('Allow', 'GET, HEAD');
     return fail(res, 405, '页面只支持读取');
   }
-  const file = path.join(frontendDir, page ? 'index.html' : pathname);
+  let resource = pathname;
+  if (publicPage.test(pathname)) resource = 'index.html';
+  if (studioPage.test(pathname)) resource = 'studio.html';
+  const file = path.join(frontendDir, resource);
   let info;
   try {
     info = await stat(file);
   } catch (error) {
     if (error.code !== 'ENOENT' && error.code !== 'ENOTDIR') throw error;
   }
-  if (!info?.isFile()) {
-    if (page) return fail(res, 500, '缺少博客页面文件 public/index.html');
-    // A catalog entry can launch a separate same-origin tool hosted by Spring.
-    return proxy(req, res);
-  }
+  if (!info?.isFile()) return fail(res, 404, '找不到这个页面或文件。');
   res.writeHead(200, {
     'Content-Type': types[path.extname(file).toLowerCase()] || 'application/octet-stream',
     'Content-Length': info.size,

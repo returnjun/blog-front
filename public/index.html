@@ -4,11 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f5ec">
+  <script src="/season.js"></script>
   <meta name="description" content="春日部邮局，把技术、生活与沿途的风景装进信封。">
   <title>春日部邮局</title>
   <link rel="icon" href="/assets/mailbox.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/weather-card.css">
   <link rel="stylesheet" href="/catalog.css">
+  <link rel="stylesheet" href="/season.css">
   <script type="module" src="/app.js"></script>
 </head>
 <body>
@@ -26,14 +29,17 @@
         <a href="/tools"><svg class="icon"><use href="/icons.svg#grid"/></svg>工具</a>
         <a href="/about"><svg class="icon"><use href="/icons.svg#user"/></svg>关于</a>
       </nav>
-      <button class="search-trigger" type="button" aria-haspopup="dialog" aria-label="搜索文章">
-        <svg class="icon"><use href="/icons.svg#search"/></svg><span>搜索文章</span><kbd>/</kbd>
-      </button>
+      <div class="visitor-actions">
+        <season-switch></season-switch>
+        <button class="search-trigger" type="button" aria-haspopup="dialog" aria-label="搜索文章">
+          <svg class="icon"><use href="/icons.svg#search"/></svg><span>搜索文章</span><kbd>/</kbd>
+        </button>
+      </div>
     </div>
   </header>
   <main id="main" tabindex="-1"></main>
   <footer class="site-footer"><div class="wrap footer-inner">
-    <span><img src="/assets/mailbox.svg" alt="" width="21" height="26">春日部邮局<span class="footer-site"></span></span>
+    <span><img src="/assets/mailbox.svg" alt="" width="21" height="26">春日部邮局</span>
     <a href="/admin/"><svg class="icon"><use href="/icons.svg#pen"/></svg>站主写作台</a>
   </div></footer>
   <dialog id="search-dialog" aria-labelledby="search-heading">
@@ -47,7 +53,7 @@
     <div class="wrap home">
       <section class="hero-frame" aria-labelledby="hero-heading">
         <div class="hero-picture">
-          <img class="hero-art" src="/assets/kasukabe.webp" alt="小新举着一封信，和小白一起跑向春日部的红邮筒" width="2172" height="724" fetchpriority="high">
+          <div class="hero-art" role="img" aria-label="小新举着一封信，和小白一起跑向春日部的红邮筒"></div>
           <div class="hero-copy">
             <div class="hero-label"><svg class="icon"><use href="/icons.svg#plane"/></svg>春日部通信<span>／</span><span lang="en">AIR MAIL</span></div>
             <h1 id="hero-heading">下一站，<br><em>春日部</em>邮局<span class="hero-stop">。</span></h1>
@@ -91,14 +97,17 @@
           </div>
           <div class="letter-list" aria-live="polite" aria-busy="true">正在收取来信…</div>
         </section>
-        <aside class="daily paper-panel">
-          <header class="panel-head"><div class="panel-title"><span class="section-icon"><svg class="icon"><use href="/icons.svg#stamp"/></svg></span><h2>今日邮戳</h2></div></header>
-          <div class="daily-body">
-            <div><small class="date-label" lang="en">DATE OF ISSUE</small><time class="daily-date"></time><span class="daily-week"></span></div>
-            <div class="seal" aria-hidden="true"><small>KASUKABE</small><b>〒</b><span>春日部</span></div>
-          </div>
-          <button type="button" class="stamp-button"><svg class="icon"><use href="/icons.svg#stamp"/></svg><span>盖个到访戳</span></button>
-          <span class="stamp-feedback" role="status"></span>
+        <aside class="home-side" aria-label="到访信息">
+          <section class="weather-card paper-panel" aria-label="当地天气"></section>
+          <section class="daily paper-panel">
+            <header class="panel-head"><div class="panel-title"><span class="section-icon"><svg class="icon"><use href="/icons.svg#stamp"/></svg></span><h2>今日邮戳</h2></div></header>
+            <div class="daily-body">
+              <div><small class="date-label" lang="en">DATE OF ISSUE</small><time class="daily-date"></time><span class="daily-week"></span></div>
+              <div class="seal" aria-hidden="true"><small>KASUKABE</small><b>〒</b><span>春日部</span></div>
+            </div>
+            <button type="button" class="stamp-button"><svg class="icon"><use href="/icons.svg#stamp"/></svg><span>盖个到访戳</span></button>
+            <span class="stamp-feedback" role="status"></span>
+          </section>
         </aside>
       </div>
     </div>

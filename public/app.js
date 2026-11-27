@@ -154,14 +154,20 @@ async function renderPage() {
     if (link.getAttribute('href') === navPath) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
-  if (!section) main.replaceChildren(document.querySelector('#home-template').content.cloneNode(true));
-  else main.replaceChildren(element('p', 'wrap loading-page', '正在打开页面…'));
+  if (!section) {
+    main.replaceChildren(document.querySelector('#home-template').content.cloneNode(true));
+    const card = main.querySelector('.weather-card');
+    import('./weather-card.js').then(({ mountWeatherCard }) => {
+      if (!signal.aborted) mountWeatherCard(card, { signal });
+    }).catch(() => {
+      if (!signal.aborted) card.textContent = '天气卡暂时无法加载，请刷新页面重试。';
+    });
+  } else main.replaceChildren(element('p', 'wrap loading-page', '正在打开页面…'));
   const config = await settings();
   if (signal.aborted) return;
-  document.querySelector('.footer-site').textContent = config?.site_name ? ' · ' + config.site_name : '';
   if (config?.site_description) document.querySelector('meta[name="description"]').content = config.site_description;
   if (!section) {
-    document.title = '春日部邮局' + (config?.site_name ? ' · ' + config.site_name : '');
+    document.title = '首页 · ' + (config?.site_name || '春日部邮局');
     showPostmark(config, signal);
     await showInbox(config, signal);
   } else {
